@@ -16,12 +16,6 @@ public class Cuckoo extends AbstractCuckoo {
             int hash1 = table1.hash(currentKey);
             int hash2 = table2.hash(currentKey);
 
-            // Stop the insertion process for a specific key
-            if (currentKey == 71) {
-               
-                return false;
-            }
-
             // Tablo 1 kontrolü
             if (table1.get(hash1) == null) {
                 table1.set(hash1, currentKey);
@@ -43,7 +37,7 @@ public class Cuckoo extends AbstractCuckoo {
             attempts++;
         }
 
-        
+    
         return false;
     }
 
