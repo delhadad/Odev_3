@@ -1,57 +1,52 @@
 public class Test {
     public static void main(String[] args) {
         /**
-         * Ödev dokümanındaki örneğin gerçekleştirilmesi
-         * İhtiyaç duyulan hash fonksiyonları aşağıda tanımlanmıştır.
-         * Cuckoo.java içindeki ekleme metodunu yazdığınızda ekran
-         * çıktıları ödev dokümanındaki gibi olmalıdır.
+         * Implementation of the example in the assignment document
+         * Required hash functions are defined below.
+         * When you implement the insert method in Cuckoo.java,
+         * the output on the screen should be as in the assignment document.
          */
-        // Tablo boyutu
+        // Table size
         int tableSize = 7;
-        // Eklenecek elemanlar
-        int[] eklenecek = new int[] { 8, 10, 2, 99, 3, 85, 47, 6, 71};
+        // Elements to be added
+        int[] toBeAdded = new int[] { 8, 10, 2, 99, 3, 85, 47, 6, 71};
         // Hash 1
         DivisionHashFunction h1 = new DivisionHashFunction(tableSize);
         // Hash 2
         RMinusModRHashFunction h2 = new RMinusModRHashFunction(tableSize);
-        // Tablo 1
+        // Table 1
         HashTable table1 = new HashTable(tableSize, h1, "password");
-        // Tablo 2
+        // Table 2
         HashTable table2 = new HashTable(tableSize, h2, "password");
-        // Cuckoo nesnesi, tabloları ve maks deneme sayısını içerir
+        // Cuckoo object containing tables and maximum attempt count
         Cuckoo cuckoo = new Cuckoo(5, table1, table2);
-        System.out.println("Başlangıç");
-        // Tabloları yazdır
+        System.out.println("Start");
+        // Print the tables
         System.out.println(cuckoo);
-        // Değerleri ekleyecek döngü
-        for (int deger : eklenecek) {
-            // Değeri ekle
-            boolean success = cuckoo.insert(deger);
-            // Başarı durumunu yazdır
-            System.out.println("Başarılı: " + success);
-            // Tabloları yazdır
+        // Loop to add values
+        for (int value : toBeAdded) {
+            // Add the value
+            boolean success = cuckoo.insert(value);
+            // Print the success status
+            System.out.println("Successful: " + success);
+            // Print the tables
             System.out.println(cuckoo);
         }
-        // Sonda sayılarını sıfırla
+        // Reset probe counts
         cuckoo.resetProbeCounts("password");
         /**
-         * Bu adımdan sonra birbirinden bağımsız olarak:
-         * cuckoo.search(47) araması true dönecektir, sonda
-         * sayıları ise 1,0 olacaktır
-         * cuckoo.search(85) araması true dönecektir, sonda
-         * sayıları 1,1 olacaktır
-         * cuckoo.search(20) araması false dönecektir, sonda
-         * sayıları 1,1 olacaktır
+         * After this step, independently:
+         * cuckoo.search(47) will return true, probe counts will be 1, 0
+         * cuckoo.search(85) will return true, probe counts will be 1, 1
+         * cuckoo.search(20) will return false, probe counts will be 1, 1
          */
-
     }
 }
 
-//-----------------------------Hash Fonksiyonları--------------------//
+//-----------------------------Hash Functions--------------------//
 /**
- * Aşağıda kullanılan hash fonksiyonları bilmoodle testlerinde
- * kullanılanlar ile aynıdır. Bu projede sadece iki tanesi
- * kullanılmıştır. İsteyenler bu fonksiyonları test için kullanabilir.
+ * The hash functions used below are the same as those used in the moodle tests.
+ * Only two of them are used in this project. Those who wish can use these functions for testing.
  */
 class FibonacciHashFunction implements HashFunction {
     private int tableSize;
@@ -141,4 +136,4 @@ class MidSquareHashFunction implements HashFunction {
         return hash % tableSize;
     }
 }
-//-----------------------------Hash Fonksiyonları--------------------//
+//-----------------------------Hash Functions--------------------//
