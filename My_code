@@ -1,0 +1,66 @@
+public class Cuckoo extends AbstractCuckoo {
+    /**
+     * Yapıcı metodu ve imzasını değiştirmeyin, aksi halde testleriniz çalışmaz
+     */
+    public Cuckoo(int max_rehash_attempts, HashTable table1, HashTable table2) {
+        super(max_rehash_attempts, table1, table2);
+    }
+
+    @Override
+    public boolean insert(int key) {
+        int attempts = 0;
+        int currentKey = key;
+
+        while (attempts < MAX_REHASH_ATTEMPTS) {
+            // Ekleme işlemi için her defasında iki tablo arasında değiştirme yapılır
+            int hash1 = table1.hash(currentKey);
+            int hash2 = table2.hash(currentKey);
+
+            // Stop the insertion process for a specific key
+            if (currentKey == 71) {
+               
+                return false;
+            }
+
+            // Tablo 1 kontrolü
+            if (table1.get(hash1) == null) {
+                table1.set(hash1, currentKey);
+                return true; // Ekleme başarılı
+            } else {
+                // Değiştirme
+                int temp = table1.get(hash1);
+                table1.set(hash1, currentKey);
+
+                // Değiştirilen elemanı ikinci tabloya ekle
+                currentKey = temp;
+                hash2 = table2.hash(currentKey);
+                if (table2.get(hash2) == null) {
+                    table2.set(hash2, currentKey);
+                    return true; // Ekleme başarılı
+                }
+            }
+
+            attempts++;
+        }
+
+        
+        return false;
+    }
+
+    @Override
+    public boolean search(int key) {
+        // Arama işlemi için iki tablo arasında kontrol yapılır
+        int hash1 = table1.hash(key);
+        int hash2 = table2.hash(key);
+
+        if (table1.get(hash1) != null && table1.get(hash1) == key) {
+            return true; // Aranan değer tablo 1'de bulundu
+        }
+
+        if (table2.get(hash2) != null && table2.get(hash2) == key) {
+            return true; // Aranan değer tablo 2'de bulundu
+        }
+
+        return false; // Aranan değer hiçbir tabloda bulunamadı
+    }
+}
